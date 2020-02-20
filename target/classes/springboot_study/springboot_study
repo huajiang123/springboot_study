@@ -1,0 +1,51 @@
+###@PropertySource(value = path,encoding = ) 
+配置文件的路径  
+###@ConfigurationProperties(prefix = )
+批量的获取配置文件中的属性，  
+* 前缀定义了哪些外部属性将绑定到类的字段上,前缀的值必须是以kebab形式。
+* 根据 Spring Boot 宽松的绑定规则，类的属性名称必须与外部属性的名称匹配
+* 我们可以简单地用一个值初始化一个字段来定义一个默认值
+* 类本身可以是包私有的
+* 类的字段必须有公共 setter 方法  
+* 也可以使用构造函数进行绑定，类或构造函数上标注@ConstructorBinding且同时标注@EnableConfigurationProperties  
+<u>配置文件尽量用kebab形式</u>  
+Properties Conversion: Converting durations,Converting Data Size.  
+@Validated 可以在绑定时，进行数据校验，比如@NotNull，@NotEmpty等  
+#Profiles
+@Profile可以和@Component, @Configuration 或者 @ConfigurationProperties 一起标注，指定在什么环境下加载  
+在配置文件中，可以使用spring.profiles.include来增加额外的profile例：  
+spring.profiles: prod  
+spring.profiles.include:  
+  - proddb  
+  - prodmq  
+表示当前配置还包含两个额外的配置也就是，proddb.yml和prodmq.yml  
+#Logging
+springboot 自动配置提供java Util Logging，Log4J2,Logback。每一个都提供控制台输出日志和文件输出。默认的springboot使用的是LogBack  
+可以在配置文件和命令行设置日志级别:例：debug=true
+springboot默认是只有控制台输出日志，可以在配置文件中配置logging.file.name和logging.file.path指定输出日志文件  
+logging.file.max-size：指定日志文件的大小，默认是10M  
+logging.file.max-history：指定日志的文件的最大保留时间，默认是7天  
+logging.file.total-size-cap：设置日志总大小  
+logging.file.clean-history-on-start：强制在应用启动的时候清除日志  
+##LogLevels
+trace<debug<info<warn<error<fatal  
+springboot 默认是info级别  
+logging.level设置日志级别，后面跟生效的区域，比如root表示整个项目，也可以设置为某个包下，也可以具体到某个类名（日志级别的值不区分大小写）例：  
+logging.level.root=warn  
+logging.level.org.springframework.web=debug  
+logging.level.org.hibernate=error  
+##LogGroups
+自定义日志生效区域，也就是分组，例：  
+logging.group.tomcat=org.apache.catalina, org.apache.coyote, org.apache.tomcat，这样就可以更方便的改变有关tomcat相关的日志级别，例：  
+logging.level.tomcat=TRACE  
+springboot帮我们预定义了两个分组，一个是web，一个是sql  
+
+
+
+
+
+
+
+
+
+

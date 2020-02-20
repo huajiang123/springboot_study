@@ -1,0 +1,33 @@
+##Restful
+请求操作 + url:  
+请求操作：get，post，put，patch，delete  
+url 中不能带有动词操作。比如：localhost:8080/user/selectuser就不符合规范。  
+##OAuth2
+OAuth（Open Authorization，开放授权）是为用户资源的授权定义了一个安全、开放及简单的标准，第三方无需知道用户的账号及密码，就可获取到用户的授权信息.  
+以在第三方网站使用微信登录为例：  
+1. 用户点击使用微信登录。  
+2. 第三方网站接到请求后，向微信发起授权请求。  
+3. 微信返回授权页面，比如说扫码。用户扫码，确认登录。  
+4. 微信回调第三方网站，并返回一些字段。  
+5. 第三方网站收到后，使用这些字段然后再向微信发起请求获取用户的相关信息。  
+##JDBC
+Java数据库连接，提供了一种与平台无关的用于执行SQL语句的标准javaAPI(获取数据源 datasource，比如获取一个链接，Connection对象)，可以方便实现多种关系型数据库的统一操作  
+##JPA
+JPA （Java Persistence API）Java持久化API。是一套Sun公司Java官方制定的ORM 方案,是规范，是标准 ，sun公司自己并没有实现。Hibernate就是一个JPA框架  
+@Entity,@Table,@Id,@Column等都是JPA的注解。  
+## Lettuce，Jedis
+两个都是链接redis server 的客户端，  
+springboot1，默认是使用Jedis来直连redis server，但是在多线程环境下，Jedis是非线程安全的。  
+springboot2,采用Lettuce来链接redis server，是线程安全的。  
+##设计模式
+在进行数据库连接时，使用单例模式。  
+连接消息中间件时，使用工厂模式，例如，在添加spring-boot-starter-activemq依赖后，spring boot会自动配置ConnectionFactory。  
+在使用RestTemplate调用远程服务的时候，spring boot会自动配置RestTemplateBuilder Bean，通过其来建造RestTemplate。  
+SchedulerFactoryBean自动配置Scheduler  
+##JSR-303
+是java ee 6中的一项子规范，叫做Bean Validation，Hibernate Validator是它的一个参考实现，Hibernate Validator提供了JSR-303 规范中所有的内置的constraint的实现，除此之外还有一些附加的实现。  
+比如：@NULL，@NOTNULL，等。  
+##Lombok
+##spring-session
+spring-session的核心思想在于此：将session从web容器中剥离，存储在独立的存储服务器中。目前支持多种形式的session存储器：Redis、Database、MogonDB等。  
+session的管理责任委托给spring-session承担。当request进入web容器，根据request获取session时，由spring-session负责存存储器中获取session，如果存在则返回，如果不存在则创建并持久化至存储器中。

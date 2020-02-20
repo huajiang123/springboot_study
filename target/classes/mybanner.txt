@@ -1,0 +1,7 @@
+application.version=${application.version}
+application.formatted-version=${application.formatted-version}
+application.title=${application.title}
+spring-boot.version=${spring-boot.version}
+spring-boot.formatted-version=${spring-boot.formatted-version}
+Ansi.name=${Ansi.name}
+AnsiBackground.name=${AnsiBackground.name}

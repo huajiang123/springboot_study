@@ -1,0 +1,118 @@
+###@PropertySource(value = path,encoding = ) 
+配置文件的路径  
+###@ConfigurationProperties(prefix = )
+批量的获取配置文件中的属性，  
+* 前缀定义了哪些外部属性将绑定到类的字段上,前缀的值必须是以kebab形式。
+* 根据 Spring Boot 宽松的绑定规则，类的属性名称必须与外部属性的名称匹配
+* 我们可以简单地用一个值初始化一个字段来定义一个默认值
+* 类本身可以是包私有的
+* 类的字段必须有公共 setter 方法  
+* 也可以使用构造函数进行绑定，类或构造函数上标注@ConstructorBinding且同时标注@EnableConfigurationProperties  
+<u>配置文件尽量用kebab形式</u>  
+Properties Conversion: Converting durations,Converting Data Size.  
+@Validated 可以在绑定时，进行数据校验，比如@NotNull，@NotEmpty等  
+#Profiles
+@Profile可以和@Component, @Configuration 或者 @ConfigurationProperties 一起标注，指定在什么环境下加载  
+在配置文件中，可以使用spring.profiles.include来增加额外的profile例：  
+spring.profiles: prod  
+spring.profiles.include:  
+  - proddb  
+  - prodmq  
+表示当前配置还包含两个额外的配置也就是，proddb.yml和prodmq.yml  
+#Logging
+springboot 自动配置提供java Util Logging，Log4J2,Logback。每一个都提供控制台输出日志和文件输出。默认的springboot使用的是LogBack  
+可以在配置文件和命令行设置日志级别:例：debug=true
+springboot默认是只有控制台输出日志，可以在配置文件中配置logging.file.name和logging.file.path指定输出日志文件  
+logging.file.max-size：指定日志文件的大小，默认是10M  
+logging.file.max-history：指定日志的文件的最大保留时间，默认是7天  
+logging.file.total-size-cap：设置日志总大小  
+logging.file.clean-history-on-start：强制在应用启动的时候清除日志  
+##LogLevels
+trace<debug<info<warn<error<fatal  
+springboot 默认是info级别  
+logging.level设置日志级别，后面跟生效的区域，比如root表示整个项目，也可以设置为某个包下，也可以具体到某个类名（日志级别的值不区分大小写）例：  
+logging.level.root=warn  
+logging.level.org.springframework.web=debug  
+logging.level.org.hibernate=error  
+##LogGroups
+自定义日志生效区域，也就是分组，例：  
+logging.group.tomcat=org.apache.catalina, org.apache.coyote, org.apache.tomcat，这样就可以更方便的改变有关tomcat相关的日志级别，例：  
+logging.level.tomcat=TRACE  
+springboot帮我们预定义了两个分组，一个是web，一个是sql  
+##CustomLogConfiguration
+可以通过添加不同的依赖激活不同的日志解析器，进一步可以通过编写相应的日志解析配置文件比如logback-spring.xml，并通过配置logging.config属性来个性化定制日志。  
+<u>Since logging is initialized before the ApplicationContext is created, it is not possible to control logging from @PropertySources in Spring @Configuration files. </u>  
+##Logback Extensions
+spring boot 为Logback提供了一些扩展标签，可以在配置logback的时候使用：  
+因为标准的logback.xml配置文件很早就会加载，所以只能在logback-spring.xml中配置或者在logging.config属性指定的配置文件中使用。  
+<springProfile name = "prod">标签指定了该标签块下的配置只能在指定的环境下生效。当然name可以使用表达式例：dev | staging 等  
+<springProperty scope = "" name = "" source = "" defaultvalue = "" /> 标签可以获取application.properties文件中定义的spring的环境变量，source 即属性名，可以设置默认值。  
+#Developing Web Application
+##Static Content
+spring boot 对于静态资源的访问它会去类路径（classpath）或者Servlet容器的跟路径（root of ServletContext)下去找目录（/static，/public，/resources，/META_INFO/resources  
+它使用的是spring mvc的ResourceHttpRequestHandler 类，因此我们可以通过实现WebMvcConfigurer 接口并覆盖addResourceHandlers方法来实现自己的静态资源访问策略。  
+静态资源的访问：默认情况下资源都被映射到/**路径下，可以通过spring.mvc.static-path-pattern配置访问的路径。另外可以通过spring.resources.static-locations配置资源的位置，也就是告诉spring boot去该路径下找静态资源。  
+
+/webjars/**路径是专门用来映射前端使用的jar文件。  
+##Welcome Page
+spring boot 会去配置的静态文件地址找index.html,或者index template 当作欢迎页面。  
+##Custom Favicon
+像其他的一样，会去配置的静态文件路径查找favicon.ico当作图标。  
+##Template Engines
+spring boot 自动配置了FreeMarker，Groovy，Thymeleaf，Mustache 模板引擎。  
+当使用默认配置的时候，spring boot会去 src/main/resources/templates.路径下加载模板。  
+##Error Handling
+可以分为两种：一种是ErrorController,一种是@ControllerAdvice  
+1. ErrorController：可以对全局错误进行处理，但是获取不到异常的具体信息，同时也无法根据异常类型进行不同的处理，例如自定义异常。  
+当我们请求服务器发生404,5xx等错误时，spring boot默认会跳转到 /error，而/error默认是BasicErrorController类进行处理的，  
+BasicErrorController类有两个方法，一个方法返回whitelable Error page，一个方法返回的是json字符串。另外可以通过继承BasicErrorController，  
+来修改返回的方式比如都返回json字符串。  
+错误信息都放在DefaultErrorAttributes类中，该类实现了ErrorAttributes接口，可以通过继承DefaultErrorAttributes类并重写getErrorAttributes方法来实现自定义错误信息。  
+<u>@RequestMapping(produces = "text/html") 与@ResponseBody一起使用可以返回指定类型。</u>  
+2. @ControllerAdvice(basepakages = ):有三种用法   
+* 全局异常处理:只针对Controller抛出的异常进行处理，对于像404,500等错误不会进入处理。  
+* 全局数据绑定：可以用来做一些初始化的数据操作，我们可以将一些公共的数据定义在添加了 @ControllerAdvice 注解的类中，这样，在每一个 Controller 的接口中，就都能够访问导致这些数据  
+* 全局数据预处理  
+全局异常处理:@ControllerAdvice（标注在类上），和@ExceptionHandler（标注在方法上）一起使用，处理某种或几种异常。  
+全局数据绑定：@ControllerAdvice 和 @ModelAttribute(name = ) （标注在方法上）返回一个全局的值。  
+####@ModelAttribute(name = ):三种用法  
+* 应用在方法上:此方法在Controller的每个方法执行之前都执行，当该方法有返回值时，返回值放在model中。  
+* 应用在方法的参数上：从model中提取指定名称的值。  
+* 应用在方法上，并且方法也使用了@RequestMapping：返回值不再是视图名，而是将返回值放入model中。  
+##Custom Error Page
+1. 在使用模板引擎的情况下在目录：src/main/resources/templates/error下添加4xx，5xx等页面即可。  
+2. 原理：在发生错误时，在BasicErrorController类中的errorHtml方法会调用resolveErrorView来获取一个ModelAndView实例，作为Error视图反给客户，  
+resolveErrorView 方法是ErrorViewResolver 接口提供的，它的默认实现是DefaultErrorViewResolver，它会去error目录下查找4xx,5xx页面。  
+因此如果我们要自定义Error视图，我们可以通过实现ErrorViewResolver 接口，并实现resolveErrorView方法即可。  
+##CORS Support(跨域资源共享)
+当前页面可能会引用其他域名下的资源比如http:localhost:8080/test的src标签中引用了http:localhost:8088/static/下的资源，出于安全原因，浏览器限制从脚本内发起的跨源HTTP请求。  
+@CrossOrigin(origins = ,maxAge = )标注在方法上，或类上，告诉浏览器允许访问指定的域名下的资源。  
+##Caching
+JSR-107缓存规范：是java进行缓存操作的一组接口，用来屏蔽各个缓存厂商的差异，从而进行统一的缓存操作，其中定义了5个核心的接口，
+分别是CachingProvider(缓存提供者)、CacheManager(缓存管理器)、Cache(缓存)、Entry(缓存键值对)和Expiry(缓存时效)。  
+CachingProvider定义了创建、配置、获取、管理和控制多个CacheManager。一个应用可以在运行期访问多个CachingProvider。  
+CacheManager定义了创建、配置、获取、管理和控制多个唯一命名的Cache，这些Cache存在于CacheManager的上下文中。一个CacheManager仅被一个CachingProvider所拥有。  
+Cache是一个类似Map的数据结构并临时存储以Key为索引的值。一个Cache仅被一个CacheManager所拥有  
+Entry是一个存储在Cache中的key-value对。  
+Expiry 每一个存储在Cache中的条目有一个定义的有效期。一旦超过这个时间，条目为过期的状态。一旦过期，条目将不可访问、更新和删除。缓存有效期可以通过ExpiryPolicy设置。  
+spring 使用两个接口对缓存进行统一的管理和操作，一个是org.springframework.cache.Cache,另一个是org.springframework.cache.CacheManager。  
+Cache接口为缓存的组件规范定义，包含缓存的各种操作(增删改查)集合。Cache接口下Spring提供了各种XxxCache的实现，如RedisCache、EhCacheCache、ConcurrentMapCache等  
+spring-boot-starter-cache依赖里有很多的xxxCacheConfiguration,帮我们自动配置CacheManager，比如当spring 容器检测到redis的组件或者说依赖，就会自动帮我们配置redisCacheManager.  
+当我们使用注解@EnableCache，但是没有添加任何的缓存组件，那么spring boot默认使用simple provider作为缓存的供应商来实现我们的缓存功能，simple provider底层是使用concurrentHashmap来实现具体的缓存存储。  
+##Task Execution and Scheduling
+在传统的jdk中我们使用excutors，excutorService来使用线程池，在spring中，为我们封装了org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor接口来使用线程池。  
+同时可以使用两个注解来简化开发：@EnableAsync（配置类上），@Async（标注在具体的方法上）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
