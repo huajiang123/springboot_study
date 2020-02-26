@@ -30,4 +30,18 @@ SchedulerFactoryBean自动配置Scheduler
 ##Lombok
 ##spring-session
 spring-session的核心思想在于此：将session从web容器中剥离，存储在独立的存储服务器中。目前支持多种形式的session存储器：Redis、Database、MogonDB等。  
-session的管理责任委托给spring-session承担。当request进入web容器，根据request获取session时，由spring-session负责存存储器中获取session，如果存在则返回，如果不存在则创建并持久化至存储器中。
+session的管理责任委托给spring-session承担。当request进入web容器，根据request获取session时，由spring-session负责存存储器中获取session，如果存在则返回，如果不存在则创建并持久化至存储器中。  
+##SpringMVC
+工作原理：由于Tomcat是一个Servlet容器，所以发送给Tomcat web服务器的请求自然都交给java Servlet处理。所以，Spring Web应用程序入口点是一个servlet。  
+1. DispatcherServlet表示前端控制器，它会拦截所有用户发送的请求。  
+2. DispatcherServlet调用HandlerMapping，HandlerMapping会根据请求的url查找Handler。  
+3. HandlerExecution为具体的handler，它会根据url查找控制器（controller）。  
+4. HandlerExecution将解析后的信息传递给DispatcherServlet，如解析控制器映射等。  
+5. DispatcherServlet调用HandlerAdapter，按照特定的规则去执行Handler。  
+6. 然后Handler让具体的Controller执行。  
+7. Controller将具体的执行信息返回给HandlerAdapter，如ModelAndView。  
+8. HandlerAdapter将具体的视图逻辑名或模型传递给DispatcherServlet。  
+9. DispatcherServlet调用ViewResolver来解析HandlerAdapter传递的逻辑视图名。  
+10. 视图解析器将解析后的视图传递给DispatcherServlet。  
+11. DispatcherServlet根据视图解析器解析的结果，调用具体的视图。  
+12. 最终呈现视图。  

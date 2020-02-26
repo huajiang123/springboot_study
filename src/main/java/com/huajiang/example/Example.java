@@ -3,6 +3,7 @@ package com.huajiang.example;
 import com.huajiang.example.config.MyConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 // @EnableAutoConfiguration,@EnableAutoConfiguration, @ComponentScan
 @EnableAutoConfiguration
 @ComponentScan
-
+@SpringBootApplication
 public class Example{
     @RequestMapping("/")
     String home(){

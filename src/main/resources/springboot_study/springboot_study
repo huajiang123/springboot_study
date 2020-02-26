@@ -102,10 +102,29 @@ spring-boot-starter-cache依赖里有很多的xxxCacheConfiguration,帮我们自
 ##Task Execution and Scheduling
 在传统的jdk中我们使用excutors，excutorService来使用线程池，在spring中，为我们封装了org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor接口来使用线程池。  
 同时可以使用两个注解来简化开发：@EnableAsync（配置类上），@Async（标注在具体的方法上）
-
-
-
-
+##SpringBoot自动配置原理
+原理：@EnableAutoConfiguration类有注解@Import({AutoConfigurationImportSelector.class})向容器中导入Bean AutoConfigurationImportSelector，  
+因为它实现了ImportSelector接口，所以spring会自动执行selectimports方法，该方法主要是去读取META-INF/spring-autoconfigure-metadata.properties，然后自动配置spring容器中的bean  
+其实也就是去加载xxxxAutoConfiguration，这里需要注意的是xxxxAutoConfiguration上有一个注解@EnableConfigurationProperties会去加载一个xxxxProperties Bean，  
+这个bean就是和application.properties里的属性对应的类。自然该类上有注解@ConfigurationProperties。  
+##SpringApplication启动过程
+1. SpringApplication完成实例化后，会调用SpringApplicationRunListener 的starting方法。实际上SpringApplicationRunListener的各个方法的调用时机标志了SpringApplication启动过程中的各个关节点。  
+调用starting方法后，会触发事件发布器EventPublishingRunListener发布ApplicationStartingEvent事件，监听该事件的ApplicationListener接口会调用其onApplicationEvent方法。  
+2. 调用ConfigurableEnvironment environment = this.prepareEnvironment(listeners, applicationArguments)创建并配置运行环境  
+然后调用listeners.environmentPrepared((ConfigurableEnvironment)environment)发布一个environmentPrepared事件，然后调用ApplicationListener接口的onApplicationEvent方法。  
+方法其实就是去调用postProcessor.postProcessEnvironment(event.getEnvironment(), event.getSpringApplication()),一大堆的后置处理器。  
+3. 然后开始容器的创建及配置。创建容器的时候会判断switch(this.webApplicationType)是否是一个web应用，如果是则判断是servlet还是reactive类型，根据不同的类型加载不同的容器。  
+如果不是web应用，会默认创建一个基于注解的AnnotationConfigApplicationContext容器。此时只是实例化，并没有初始化。  
+4. 然后调用SpringApplication的applyInitializers方法，该方法默认会调用ApplicationContextInitializer接口的Initialize方法，用于对ApplicationContext初始化。  
+5. 容器初始化完成后，调用listeners.contextPrepared(context),发布一个contextPrepared事件，同理，调用相应ApplicationListenerApplicationListener的onApplicationEvent方法。  
+6. 调用SpringApplication的load方法，把SpringApplication初始化时导入的资源注册到ApplicationContext中进行统一管理。这样ApplicationContext就对其生前发生的事情足够了解。  
+7. 调用SpringApplicationRunListener的contextLoaded方法，发布一个ApplicationPreparedEvent并调用相应的ApplicationListener的onApplicationEvent方法。  
+8. 调用SpringApplication的refresh方法，刷新容器即进行Bean的注入过程。并注册结束钩子用于容器销毁。  
+9. 调用afterRefresh(context, applicationArguments)，用于在容器刷新后进行一些应用级别的操作。  
+10. 调用SpringApplicationRunListener的started方法，发布ApplicationStartedEvent并调用相应的ApplicationListener的onApplicationEvent方法。此时容器已经启动完成。  
+11. 调用ApplicationRunner和CommandLineRunner的run方法。用于在容器启动后执行定制操作。  
+12. 调用SpringApplicationRunListener的running方法，发布一个ApplicationReadyEvent并调用相应的ApplicationListener的onApplicationEvent方法。完成应用的启动阶段。  
+##ApplicationContext启动过程
 
 
 

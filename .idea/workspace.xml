@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="de69764b-17c8-4cc8-89d8-33685b374a4c" name="Default Changelist" comment="" />
+    <list default="true" id="de69764b-17c8-4cc8-89d8-33685b374a4c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/huajiang/example/Example.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/huajiang/example/Example.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/springboot_study/springboot_study" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/springboot_study/springboot_study" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/springboot_study/tips" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/springboot_study/tips" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,6 +34,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -49,6 +58,7 @@
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
@@ -100,6 +110,9 @@
       <workItem from="1581555656739" duration="21120000" />
       <workItem from="1581641714872" duration="24661000" />
       <workItem from="1581728962438" duration="12179000" />
+      <workItem from="1582289991601" duration="4557000" />
+      <workItem from="1582336490915" duration="11093000" />
+      <workItem from="1582607584798" duration="6855000" />
     </task>
     <servers />
   </component>
@@ -143,13 +156,13 @@
       <screen x="65" y="24" width="1301" height="744" />
     </state>
     <state width="1249" height="538" key="GridCell.Tab.1.right/65.24.1301.744@65.24.1301.744" timestamp="1581597447855" />
-    <state x="326" y="211" key="com.intellij.ide.util.TipDialog" timestamp="1581728962455">
+    <state x="326" y="211" key="com.intellij.ide.util.TipDialog" timestamp="1582336490986">
       <screen x="65" y="24" width="1301" height="744" />
     </state>
-    <state x="326" y="211" key="com.intellij.ide.util.TipDialog/65.24.1301.744@65.24.1301.744" timestamp="1581728962455" />
-    <state x="355" y="89" width="719" height="678" key="search.everywhere.popup" timestamp="1581732951732">
+    <state x="326" y="211" key="com.intellij.ide.util.TipDialog/65.24.1301.744@65.24.1301.744" timestamp="1582336490986" />
+    <state x="355" y="89" width="719" height="678" key="search.everywhere.popup" timestamp="1582613007562">
       <screen x="65" y="24" width="1301" height="744" />
     </state>
-    <state x="355" y="89" width="719" height="678" key="search.everywhere.popup/65.24.1301.744@65.24.1301.744" timestamp="1581732951732" />
+    <state x="355" y="89" width="719" height="678" key="search.everywhere.popup/65.24.1301.744@65.24.1301.744" timestamp="1582613007562" />
   </component>
 </project>
