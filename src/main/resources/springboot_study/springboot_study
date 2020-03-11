@@ -125,7 +125,14 @@ spring-boot-starter-cache依赖里有很多的xxxCacheConfiguration,帮我们自
 11. 调用ApplicationRunner和CommandLineRunner的run方法。用于在容器启动后执行定制操作。  
 12. 调用SpringApplicationRunListener的running方法，发布一个ApplicationReadyEvent并调用相应的ApplicationListener的onApplicationEvent方法。完成应用的启动阶段。  
 ##ApplicationContext启动过程
-
+##querydsl-jpa
+通用的查询框架，通过javaAPI来构建类型安全的sql查询，可以构建出适合不同类型的ORM框架和sql。  
+##thumbnailator
+google处理图片的一个框架
+##apk-parser
+解析APK包
+##jodconverter
+word文件预览
 
 
 
